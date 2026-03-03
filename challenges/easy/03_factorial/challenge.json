@@ -1,0 +1,19 @@
+{
+  "id": "easy_03",
+  "title": "Factorial",
+  "difficulty": "easy",
+  "category": "Missing return",
+  "description": "Given a non-negative integer `n`, return `n!` (n factorial).\n\nRecall: `0! = 1`, and `n! = n × (n-1) × ... × 1` for `n > 0`.\n\n**Example 1:**\nInput: `n = 5`\nOutput: `120`\nExplanation: 5 × 4 × 3 × 2 × 1 = 120\n\n**Example 2:**\nInput: `n = 0`\nOutput: `1`\n\n**Example 3:**\nInput: `n = 6`\nOutput: `720`\n\n**Constraints:**\n- `0 <= n <= 12`",
+  "files": [
+    {"name": "buggy.py", "editable": true}
+  ],
+  "entry_module": "buggy",
+  "entry_function": "factorial",
+  "test_cases": [
+    {"args": [5], "expected": 120},
+    {"args": [0], "expected": 1},
+    {"args": [1], "expected": 1},
+    {"args": [6], "expected": 720}
+  ],
+  "hint": "In Python, a function without an explicit `return` returns `None`. Check your recursive case."
+}

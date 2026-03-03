@@ -1,0 +1,18 @@
+{
+  "id": "easy_05",
+  "title": "Grade Message",
+  "difficulty": "easy",
+  "category": "Type mismatch",
+  "description": "Given a student's `name` (string) and `score` (integer), return a formatted message in the following exact format:\n\n`\"Student <name> scored <score> points.\"`\n\n**Example 1:**\nInput: `name = \"Alice\"`, `score = 95`\nOutput: `\"Student Alice scored 95 points.\"`\n\n**Example 2:**\nInput: `name = \"Bob\"`, `score = 72`\nOutput: `\"Student Bob scored 72 points.\"`\n\n**Example 3:**\nInput: `name = \"Carol\"`, `score = 0`\nOutput: `\"Student Carol scored 0 points.\"`\n\n**Constraints:**\n- `1 <= len(name) <= 50`\n- `0 <= score <= 100`",
+  "files": [
+    {"name": "buggy.py", "editable": true}
+  ],
+  "entry_module": "buggy",
+  "entry_function": "grade_message",
+  "test_cases": [
+    {"args": ["Alice", 95], "expected": "Student Alice scored 95 points."},
+    {"args": ["Bob",   72], "expected": "Student Bob scored 72 points."},
+    {"args": ["Carol", 0],  "expected": "Student Carol scored 0 points."}
+  ],
+  "hint": "You can't concatenate a string and an integer directly in Python. How do you convert one to the other?"
+}

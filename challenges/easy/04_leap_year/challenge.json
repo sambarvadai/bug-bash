@@ -1,0 +1,20 @@
+{
+  "id": "easy_04",
+  "title": "Leap Year",
+  "difficulty": "easy",
+  "category": "Logic error",
+  "description": "Given a year, return `True` if it is a leap year, `False` otherwise.\n\nA year is a leap year if it satisfies **either** of these conditions:\n- Divisible by `4` **and** not divisible by `100`, **or**\n- Divisible by `400`.\n\n**Example 1:**\nInput: `year = 2024`\nOutput: `True`\nExplanation: Divisible by 4, not by 100.\n\n**Example 2:**\nInput: `year = 1900`\nOutput: `False`\nExplanation: Divisible by 100 but not by 400.\n\n**Example 3:**\nInput: `year = 2000`\nOutput: `True`\nExplanation: Divisible by 400.\n\n**Constraints:**\n- `1 <= year <= 9999`",
+  "files": [
+    {"name": "buggy.py", "editable": true}
+  ],
+  "entry_module": "buggy",
+  "entry_function": "is_leap_year",
+  "test_cases": [
+    {"args": [2024], "expected": true},
+    {"args": [1900], "expected": false},
+    {"args": [2000], "expected": true},
+    {"args": [2023], "expected": false},
+    {"args": [1600], "expected": true}
+  ],
+  "hint": "The two conditions should be joined by `or`, not `and`. Re-read the leap year rules carefully."
+}

@@ -1,0 +1,18 @@
+{
+  "id": "easy_06",
+  "title": "Days Between Dates",
+  "difficulty": "easy",
+  "category": "Wrong format string",
+  "description": "Given two date strings in **`DD/MM/YYYY`** format, return the number of days between them. The result is positive when `end_str` falls after `start_str`.\n\n**Example 1:**\nInput: `start_str = \"05/01/2025\"`, `end_str = \"05/07/2025\"`\nOutput: `181`\nExplanation: January 5 → July 5, 2025 = 181 days.\n\n**Example 2:**\nInput: `start_str = \"10/03/2025\"`, `end_str = \"10/06/2025\"`\nOutput: `92`\nExplanation: March 10 → June 10, 2025 = 92 days.\n\n**Example 3:**\nInput: `start_str = \"01/02/2025\"`, `end_str = \"01/11/2025\"`\nOutput: `273`\n\n**Constraints:**\n- Both dates are valid and in `DD/MM/YYYY` format.\n- `end_str >= start_str`",
+  "files": [
+    {"name": "buggy.py", "editable": true}
+  ],
+  "entry_module": "buggy",
+  "entry_function": "days_between",
+  "test_cases": [
+    {"args": ["05/01/2025", "05/07/2025"], "expected": 181},
+    {"args": ["10/03/2025", "10/06/2025"], "expected": 92},
+    {"args": ["01/02/2025", "01/11/2025"], "expected": 273}
+  ],
+  "hint": "The dates are in DD/MM/YYYY format. What does `%m` mean vs `%d` in a strptime format string?"
+}

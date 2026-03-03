@@ -1,0 +1,100 @@
+{
+  "id": "medium_01",
+  "title": "Event Dispatcher",
+  "difficulty": "medium",
+  "category": "Closure / late binding",
+  "description": "You are building an event processing pipeline. Given a list of events, each with a `\"type\"` and a `\"payload\"`, route each event through its matching handler and return the results in order.\n\nEach result must be: `{\"event\": <type>, \"data\": <payload>}`\n\n**Example 1:**\nInput:\n```\nevents = [\n  {\"type\": \"login\",  \"payload\": \"user_123\"},\n  {\"type\": \"logout\", \"payload\": \"user_456\"}\n]\n```\nOutput:\n```\n[{\"event\": \"login\",  \"data\": \"user_123\"},\n {\"event\": \"logout\", \"data\": \"user_456\"}]\n```\n\n**Example 2:**\nInput: `[{\"type\": \"click\", \"payload\": \"btn_ok\"}, {\"type\": \"hover\", \"payload\": \"menu\"}]`\nOutput: `[{\"event\": \"click\", \"data\": \"btn_ok\"}, {\"event\": \"hover\", \"data\": \"menu\"}]`\n\n**Constraints:**\n- `1 <= len(events) <= 100`\n- Every event has exactly `\"type\"` (str) and `\"payload\"` (any) fields.\n\n**Note:** Handlers are built in a loop — trace carefully how Python captures loop variables inside a closure.",
+  "files": [
+    {"name": "main.py",       "editable": true},
+    {"name": "dispatcher.py", "editable": true}
+  ],
+  "entry_module": "main",
+  "entry_function": "process_events",
+  "test_cases": [
+    {
+      "args": [[
+        {"type": "login",  "payload": "user_123"},
+        {"type": "logout", "payload": "user_456"},
+        {"type": "login",  "payload": "user_789"}
+      ]],
+      "expected": [
+        {"event": "login",  "data": "user_123"},
+        {"event": "logout", "data": "user_456"},
+        {"event": "login",  "data": "user_789"}
+      ]
+    },
+    {
+      "args": [[
+        {"type": "click", "payload": "btn_ok"},
+        {"type": "hover", "payload": "menu_item"},
+        {"type": "click", "payload": "btn_cancel"}
+      ]],
+      "expected": [
+        {"event": "click", "data": "btn_ok"},
+        {"event": "hover", "data": "menu_item"},
+        {"event": "click", "data": "btn_cancel"}
+      ]
+    }
+  ],
+  "hint": "In Python, variables in a `lambda` are captured by **reference**, not by value. By the time the lambdas are called, what is the value of `event`?",
+  "requirements_updates": [
+    {
+      "id": "upd_1",
+      "trigger": {"type": "random", "min_runs": 2, "max_runs": 4},
+      "sender": "PM",
+      "message": "We're adding new event sources and can't guarantee every event type will have a registered handler. Instead of crashing, unknown types should return {\"event\": \"unknown\", \"data\": <payload>}.",
+      "additional_test_cases": [
+        {
+          "args": [[
+            {"type": "login",    "payload": "user_1"},
+            {"type": "purchase", "payload": "item_999"},
+            {"type": "logout",   "payload": "user_1"}
+          ]],
+          "expected": [
+            {"event": "login",   "data": "user_1"},
+            {"event": "unknown", "data": "item_999"},
+            {"event": "logout",  "data": "user_1"}
+          ]
+        },
+        {
+          "args": [[
+            {"type": "totally_new_event", "payload": "xyz"}
+          ]],
+          "expected": [
+            {"event": "unknown", "data": "xyz"}
+          ]
+        }
+      ]
+    },
+    {
+      "id": "upd_2",
+      "trigger": {"type": "on_pass"},
+      "sender": "Backend",
+      "message": "Audit logging requires a timestamp field on every processed event. Hard-code it as `\"ts\": 0` for now — we'll wire up real timestamps later.",
+      "additional_test_cases": [
+        {
+          "args": [[
+            {"type": "login",  "payload": "alice"},
+            {"type": "logout", "payload": "alice"}
+          ]],
+          "expected": [
+            {"event": "login",  "data": "alice", "ts": 0},
+            {"event": "logout", "data": "alice", "ts": 0}
+          ]
+        },
+        {
+          "args": [[
+            {"type": "deploy",   "payload": "v2.0"},
+            {"type": "rollback", "payload": "v1.0"},
+            {"type": "unknown_op", "payload": "?"}
+          ]],
+          "expected": [
+            {"event": "deploy",   "data": "v2.0", "ts": 0},
+            {"event": "rollback", "data": "v1.0", "ts": 0},
+            {"event": "unknown",  "data": "?",    "ts": 0}
+          ]
+        }
+      ]
+    }
+  ]
+}

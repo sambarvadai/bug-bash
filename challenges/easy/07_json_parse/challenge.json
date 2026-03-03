@@ -1,0 +1,18 @@
+{
+  "id": "easy_07",
+  "title": "Parse Config String",
+  "difficulty": "easy",
+  "category": "Wrong stdlib function",
+  "description": "Given a string `json_string` containing a valid JSON object, parse it and return the equivalent Python `dict`.\n\n**Example 1:**\nInput: `json_string = '{\"host\": \"localhost\", \"port\": 8080}'`\nOutput: `{\"host\": \"localhost\", \"port\": 8080}`\n\n**Example 2:**\nInput: `json_string = '{\"debug\": true, \"workers\": 4}'`\nOutput: `{\"debug\": True, \"workers\": 4}`\n\n**Example 3:**\nInput: `json_string = '{\"retries\": 3, \"timeout\": 30}'`\nOutput: `{\"retries\": 3, \"timeout\": 30}`\n\n**Constraints:**\n- `json_string` is always a valid JSON object.\n- Values may be strings, integers, booleans, or null.",
+  "files": [
+    {"name": "buggy.py", "editable": true}
+  ],
+  "entry_module": "buggy",
+  "entry_function": "parse_config",
+  "test_cases": [
+    {"args": ["{\"host\": \"localhost\", \"port\": 8080}"], "expected": {"host": "localhost", "port": 8080}},
+    {"args": ["{\"debug\": true, \"workers\": 4}"],         "expected": {"debug": true, "workers": 4}},
+    {"args": ["{\"retries\": 3, \"timeout\": 30}"],        "expected": {"retries": 3, "timeout": 30}}
+  ],
+  "hint": "`json.load()` reads from a **file object**. What function reads from a **string**?"
+}
