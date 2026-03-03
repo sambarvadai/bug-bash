@@ -6,6 +6,8 @@ import UpdateFeed from "./components/UpdateFeed.jsx";
 import Results from "./components/Results.jsx";
 import LandingPage from "./components/LandingPage.jsx";
 
+const API_BASE = import.meta.env.VITE_API_URL ?? "";
+
 const SOLVED_KEY = "bug-bash-solved";
 const FIRED_KEY  = "bug-bash-fired";
 
@@ -62,7 +64,7 @@ export default function App() {
 
   // Fetch challenge list once
   useEffect(() => {
-    fetch("/api/challenges")
+    fetch(`${API_BASE}/api/challenges`)
       .then((r) => r.json())
       .then((data) => {
         setChallenges(data);
@@ -77,7 +79,7 @@ export default function App() {
     setChallenge(null);
     setResults(null);
     setHintShown(false);
-    fetch(`/api/challenges/${selectedId}`)
+    fetch(`${API_BASE}/api/challenges/${selectedId}`)
       .then((r) => r.json())
       .then(setChallenge)
       .catch(console.error);
@@ -97,7 +99,7 @@ export default function App() {
       const activeUpdateIds = [...currentlyFired];
 
       try {
-        const res = await fetch(`/api/run/${challenge.id}`, {
+        const res = await fetch(`${API_BASE}/api/run/${challenge.id}`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ files, active_update_ids: activeUpdateIds }),
