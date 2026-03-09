@@ -2,7 +2,7 @@ import streamlit as st
 import json
 import os
 
-from runner import run_challenge
+from backend.runner import run_challenge
 
 st.set_page_config(
     page_title="Bug Squash",

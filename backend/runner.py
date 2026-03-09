@@ -100,7 +100,11 @@ def run_challenge(challenge: dict, user_code: dict) -> dict:
 
         entry_module = challenge["entry_module"]
         entry_function = challenge["entry_function"]
-        test_cases_json = json.dumps(challenge["test_cases"])
+
+        # Write test cases to a file so they don't need to be embedded in the script
+        test_cases_path = os.path.join(tmpdir, "_test_cases.json")
+        with open(test_cases_path, "w", encoding="utf-8") as f:
+            json.dump(challenge["test_cases"], f)
 
         allowed = set(challenge.get("allowed_modules", []))
         active_blocklist = _BLOCKED_MODULES - allowed
@@ -112,9 +116,13 @@ def run_challenge(challenge: dict, user_code: dict) -> dict:
 
         runner_script = f"""
 import sys, json, copy
+null = None; true = True; false = False
 sys.path.insert(0, {json.dumps(tmpdir)})
 
 {sandbox_prelude}
+
+with _real_open({repr(test_cases_path)}, encoding="utf-8") as _f:
+    _test_cases = json.load(_f)
 
 try:
     from {entry_module} import {entry_function}
@@ -127,12 +135,12 @@ except Exception as import_err:
             "input": tc["args"],
             "error": f"Import error: {{import_err}}"
         }}
-        for tc in {test_cases_json}
+        for tc in _test_cases
     ]
     print(json.dumps(results))
     sys.exit(0)
 
-test_cases = {test_cases_json}
+test_cases = _test_cases
 results = []
 for tc in test_cases:
     try:
