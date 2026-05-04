@@ -1,0 +1,239 @@
+{
+  "id": "medium_03_ts",
+  "title": "Data Normalizer (TS)",
+  "difficulty": "medium",
+  "category": "In-place mutation",
+  "description": "Given a list of records, each with a `\"name\"` and integer `\"value\"`, return a summary dict with three fields:\n- `\"original\"` — the input values in their original order.\n- `\"normalized\"` — each value scaled to `[0.0, 1.0]` by dividing by the maximum.\n- `\"top\"` — the name of the record with the highest value.\n\n**Example 1:**\nInput: `[{\"name\": \"alpha\", \"value\": 10}, {\"name\": \"beta\", \"value\": 40}, {\"name\": \"gamma\", \"value\": 20}]`\nOutput: `{\"original\": [10, 40, 20], \"normalized\": [0.25, 1.0, 0.5], \"top\": \"beta\"}`\n\n**Example 2:**\nInput: `[{\"name\": \"x\", \"value\": 100}, {\"name\": \"y\", \"value\": 50}, {\"name\": \"z\", \"value\": 25}]`\nOutput: `{\"original\": [100, 50, 25], \"normalized\": [1.0, 0.5, 0.25], \"top\": \"x\"}`\n\n**Constraints:**\n- `1 <= len(records) <= 100`\n- `1 <= value <= 1000000`\n- All values are distinct.\n\n**Note:** `\"original\"` and `\"normalized\"` are coming back identical. The normalization math is correct — the problem is about *when* the original values are read relative to when normalization runs.",
+  "files": [
+    {
+      "name": "main.ts",
+      "editable": true
+    },
+    {
+      "name": "processor.ts",
+      "editable": true
+    }
+  ],
+  "entry_module": "main",
+  "entry_function": "summarize",
+  "test_cases": [
+    {
+      "args": [
+        [
+          {
+            "name": "alpha",
+            "value": 10
+          },
+          {
+            "name": "beta",
+            "value": 40
+          },
+          {
+            "name": "gamma",
+            "value": 20
+          }
+        ]
+      ],
+      "expected": {
+        "original": [
+          10,
+          40,
+          20
+        ],
+        "normalized": [
+          0.25,
+          1.0,
+          0.5
+        ],
+        "top": "beta"
+      }
+    },
+    {
+      "args": [
+        [
+          {
+            "name": "x",
+            "value": 100
+          },
+          {
+            "name": "y",
+            "value": 50
+          },
+          {
+            "name": "z",
+            "value": 25
+          }
+        ]
+      ],
+      "expected": {
+        "original": [
+          100,
+          50,
+          25
+        ],
+        "normalized": [
+          1.0,
+          0.5,
+          0.25
+        ],
+        "top": "x"
+      }
+    }
+  ],
+  "hint": "Does `normalize()` create new record objects, or modify the ones passed in? Check whether `summarize` and `normalize` share the same object references.",
+  "requirements_updates": [
+    {
+      "id": "upd_1",
+      "trigger": {
+        "type": "random",
+        "min_runs": 2,
+        "max_runs": 5
+      },
+      "sender": "PM",
+      "message": "Dashboard needs to show which position the top record is at. Add `\"top_index\"` (0-based) to the summarize output.",
+      "additional_test_cases": [
+        {
+          "args": [
+            [
+              {
+                "name": "x",
+                "value": 100
+              },
+              {
+                "name": "y",
+                "value": 50
+              },
+              {
+                "name": "z",
+                "value": 25
+              }
+            ]
+          ],
+          "expected": {
+            "original": [
+              100,
+              50,
+              25
+            ],
+            "normalized": [
+              1.0,
+              0.5,
+              0.25
+            ],
+            "top": "x",
+            "top_index": 0
+          }
+        },
+        {
+          "args": [
+            [
+              {
+                "name": "p",
+                "value": 5
+              },
+              {
+                "name": "q",
+                "value": 10
+              },
+              {
+                "name": "r",
+                "value": 3
+              }
+            ]
+          ],
+          "expected": {
+            "original": [
+              5,
+              10,
+              3
+            ],
+            "normalized": [
+              0.5,
+              1.0,
+              0.3
+            ],
+            "top": "q",
+            "top_index": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "upd_2",
+      "trigger": {
+        "type": "on_pass"
+      },
+      "sender": "Client",
+      "message": "Can you also add a `\"bottom\"` field — the name of the record with the lowest original value? Same format as `\"top\"`.",
+      "additional_test_cases": [
+        {
+          "args": [
+            [
+              {
+                "name": "alpha",
+                "value": 10
+              },
+              {
+                "name": "beta",
+                "value": 40
+              },
+              {
+                "name": "gamma",
+                "value": 20
+              }
+            ]
+          ],
+          "expected": {
+            "original": [
+              10,
+              40,
+              20
+            ],
+            "normalized": [
+              0.25,
+              1.0,
+              0.5
+            ],
+            "top": "beta",
+            "top_index": 1,
+            "bottom": "alpha"
+          }
+        },
+        {
+          "args": [
+            [
+              {
+                "name": "a",
+                "value": 100
+              },
+              {
+                "name": "b",
+                "value": 1
+              },
+              {
+                "name": "c",
+                "value": 50
+              }
+            ]
+          ],
+          "expected": {
+            "original": [
+              100,
+              1,
+              50
+            ],
+            "normalized": [
+              1.0,
+              0.01,
+              0.5
+            ],
+            "top": "a",
+            "top_index": 0,
+            "bottom": "b"
+          }
+        }
+      ]
+    }
+  ],
+  "language": "typescript"
+}

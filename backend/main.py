@@ -56,6 +56,7 @@ def list_challenges():
             "title": ch["title"],
             "difficulty": ch["difficulty"],
             "category": ch["category"],
+            "language": ch.get("language", "python"),
         }
         for ch in _challenges
     ]

@@ -1,17 +1,35 @@
+import { useState } from "react";
+
 const DIFF_ICON = { easy: "🟢", medium: "🟡", hard: "🔴" };
 const DIFF_ORDER = ["easy", "medium", "hard"];
 
+function baseId(id) {
+  return id.replace(/_(js|ts)$/, "");
+}
+
 export default function Sidebar({ challenges, selectedId, solved, onSelect }) {
+  // Deduplicate: one entry per base challenge (drop _js / _ts variants)
+  const seen = new Set();
+  const deduped = challenges.filter((c) => {
+    const base = baseId(c.id);
+    if (seen.has(base)) return false;
+    seen.add(base);
+    return true;
+  });
+
   const byDiff = {};
-  for (const ch of challenges) {
+  for (const ch of deduped) {
     (byDiff[ch.difficulty] ??= []).push(ch);
   }
 
-  const total = challenges.length;
+  const total = deduped.length;
   const solvedCount = [...solved].filter((id) =>
-    challenges.some((c) => c.id === id)
+    deduped.some((c) => baseId(id) === baseId(c.id))
   ).length;
   const pct = total > 0 ? (solvedCount / total) * 100 : 0;
+
+  // A sidebar item is active if selectedId belongs to the same base group
+  const activeBase = baseId(selectedId || "");
 
   return (
     <aside className="sidebar">
@@ -28,7 +46,7 @@ export default function Sidebar({ challenges, selectedId, solved, onSelect }) {
             </div>
             {byDiff[diff].map((ch) => {
               const isSolved = solved.has(ch.id);
-              const isActive = ch.id === selectedId;
+              const isActive = baseId(ch.id) === activeBase;
               return (
                 <button
                   key={ch.id}
@@ -51,9 +69,7 @@ export default function Sidebar({ challenges, selectedId, solved, onSelect }) {
             style={{ width: `${pct}%` }}
           />
         </div>
-        <p>
-          {solvedCount} / {total} solved
-        </p>
+        <p>{solvedCount} / {total} solved</p>
       </div>
     </aside>
   );

@@ -1,0 +1,17 @@
+{
+  "id": "easy_06_js",
+  "title": "Days Between Dates (JS)",
+  "difficulty": "easy",
+  "language": "javascript",
+  "category": "Wrong format / index",
+  "description": "Given two date strings in `DD/MM/YYYY` format, return the number of days from `start` to `end`.\n\n**Example 1:**\nInput: `\"05/01/2023\"`, `\"10/01/2023\"` → `5`\n\n**Example 2:**\nInput: `\"01/03/2023\"`, `\"01/05/2023\"` → `61`\n\n**Constraints:** end is always after start.",
+  "files": [{"name": "buggy.js", "editable": true}],
+  "entry_module": "buggy",
+  "entry_function": "daysBetween",
+  "test_cases": [
+    {"args": ["05/01/2023", "10/01/2023"], "expected": 5},
+    {"args": ["01/03/2023", "01/05/2023"], "expected": 61},
+    {"args": ["01/01/2023", "31/12/2023"], "expected": 364}
+  ],
+  "hint": "After splitting on `/`, which index is the day and which is the month? `new Date(year, month, day)` uses a 0-indexed month."
+}

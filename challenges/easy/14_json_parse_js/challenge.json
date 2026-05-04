@@ -1,0 +1,17 @@
+{
+  "id": "easy_07_js",
+  "title": "Parse Config (JS)",
+  "difficulty": "easy",
+  "language": "javascript",
+  "category": "Wrong method",
+  "description": "Parse a JSON-formatted string and return the resulting object.\n\n**Example:**\nInput: `'{\"host\": \"localhost\", \"port\": 8080}'`\nOutput: `{host: \"localhost\", port: 8080}`",
+  "files": [{"name": "buggy.js", "editable": true}],
+  "entry_module": "buggy",
+  "entry_function": "parseConfig",
+  "test_cases": [
+    {"args": ["{\"host\": \"localhost\", \"port\": 8080}"],  "expected": {"host": "localhost", "port": 8080}},
+    {"args": ["{\"debug\": true, \"timeout\": 30}"],        "expected": {"debug": true, "timeout": 30}},
+    {"args": ["{\"items\": [1, 2, 3], \"count\": 3}"],     "expected": {"items": [1, 2, 3], "count": 3}}
+  ],
+  "hint": "`JSON.stringify` turns an object into a string. What turns a string into an object?"
+}

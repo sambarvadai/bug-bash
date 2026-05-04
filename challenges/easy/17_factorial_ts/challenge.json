@@ -1,0 +1,19 @@
+{
+  "id": "easy_03_ts",
+  "title": "Factorial (TS)",
+  "difficulty": "easy",
+  "language": "typescript",
+  "category": "Missing return",
+  "description": "Return `n!` for any non-negative integer `n`. Recall that `0! = 1`.\n\n**Example 1:**\nInput: `n = 5`\nOutput: `120`\n\n**Example 2:**\nInput: `n = 0`\nOutput: `1`\n\n**Constraints:** `0 <= n <= 12`",
+  "files": [{"name": "buggy.ts", "editable": true}],
+  "entry_module": "buggy",
+  "entry_function": "factorial",
+  "test_cases": [
+    {"args": [5],  "expected": 120},
+    {"args": [0],  "expected": 1},
+    {"args": [1],  "expected": 1},
+    {"args": [4],  "expected": 24},
+    {"args": [10], "expected": 3628800}
+  ],
+  "hint": "The recursive case computes a value — but does the function do anything with it?"
+}

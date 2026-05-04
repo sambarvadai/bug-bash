@@ -1,0 +1,19 @@
+{
+  "id": "easy_02_ts",
+  "title": "Find the Maximum (TS)",
+  "difficulty": "easy",
+  "language": "typescript",
+  "category": "Wrong comparison",
+  "description": "Given an array of numbers, return the largest value. Return `null` if the array is empty.\n\n**Example 1:**\nInput: `[3, 1, 4, 1, 5, 9, 2, 6]`\nOutput: `9`\n\n**Example 2:**\nInput: `[]`\nOutput: `null`\n\n**Constraints:** Values may be negative.",
+  "files": [{"name": "buggy.ts", "editable": true}],
+  "entry_module": "buggy",
+  "entry_function": "findMax",
+  "test_cases": [
+    {"args": [[3, 1, 4, 1, 5, 9, 2, 6]], "expected": 9},
+    {"args": [[1]],                        "expected": 1},
+    {"args": [[-3, -1, -4]],              "expected": -1},
+    {"args": [[0, 0, 0]],                 "expected": 0},
+    {"args": [[]],                         "expected": null}
+  ],
+  "hint": "Look closely at the comparison operator inside the loop. Which direction should the update fire?"
+}

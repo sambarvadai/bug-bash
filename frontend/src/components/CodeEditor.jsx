@@ -1,12 +1,27 @@
 import { useRef, useState, useEffect, useCallback } from "react";
 import Editor, { useMonaco } from "@monaco-editor/react";
 
+const LANG_LABELS = {
+  python: "Python",
+  javascript: "JavaScript",
+  typescript: "TypeScript",
+  cpp: "C++",
+  rust: "Rust",
+};
+
+function langFromFilename(name) {
+  const ext = name.split(".").pop();
+  return { py: "python", js: "javascript", ts: "typescript", cpp: "cpp", rs: "rust" }[ext] || "plaintext";
+}
+
 export default function CodeEditor({
   challenge,
   running,
   hintShown,
   onRun,
   onHint,
+  languageSiblings = [],
+  onLanguageChange,
 }) {
   const monaco = useMonaco();
   const editorRef = useRef(null);
@@ -31,7 +46,7 @@ export default function CodeEditor({
       } else {
         modelsRef.current[file.name] = monaco.editor.createModel(
           file.initial_code,
-          "python",
+          langFromFilename(file.name),
           uri
         );
       }
@@ -87,6 +102,22 @@ export default function CodeEditor({
 
   return (
     <div className="editor-section">
+      {languageSiblings.length > 1 && (
+        <div className="lang-picker-bar">
+          <span className="lang-picker-label">Language</span>
+          <select
+            className="lang-picker-select"
+            value={challenge.id}
+            onChange={(e) => onLanguageChange(e.target.value)}
+          >
+            {languageSiblings.map((s) => (
+              <option key={s.id} value={s.id}>
+                {LANG_LABELS[s.language] ?? s.language}
+              </option>
+            ))}
+          </select>
+        </div>
+      )}
       <div className="tab-bar">
         {challenge.files.map((file) => (
           <button
@@ -102,7 +133,7 @@ export default function CodeEditor({
       <div className="monaco-wrapper">
         <Editor
           height="100%"
-          defaultLanguage="python"
+          defaultLanguage="plaintext"
           theme="vs-dark"
           onMount={handleEditorMount}
           options={{

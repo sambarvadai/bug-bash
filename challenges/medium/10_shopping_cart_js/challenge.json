@@ -1,0 +1,296 @@
+{
+  "id": "medium_04_js",
+  "title": "Shopping Cart (JS)",
+  "difficulty": "medium",
+  "category": "Class variable + unimplemented method",
+  "description": "Given a list of orders, return a dict mapping each customer's name to their order total.\n\nEach order: `{\"customer\": str, \"items\": [[name, price, qty], ...], \"discount\": int}`\n\nA discount of `p` reduces every item's unit price by `p%` before multiplying by quantity.\n\n**Example 1:**\nInput: `[{\"customer\": \"Alice\", \"items\": [[\"shirt\", 20, 1], [\"pants\", 40, 1]], \"discount\": 0}]`\nOutput: `{\"Alice\": 60}`\n\n**Example 2:**\nInput: `[{\"customer\": \"Bob\", \"items\": [[\"hat\", 50, 1]], \"discount\": 10}]`\nOutput: `{\"Bob\": 45.0}`\nExplanation: 50 × (1 − 0.10) = 45.0\n\n**Example 3:**\nInput: `[{\"customer\": \"Carol\", \"items\": [[\"pen\", 5, 2], [\"notebook\", 8, 1]], \"discount\": 0}]`\nOutput: `{\"Carol\": 18}`\n\n**Constraints:**\n- `1 <= len(orders) <= 50`\n- `0 <= discount <= 100`\n- Each customer name is unique in the input.\n\n**Tasks:** Two things need fixing — isolate cart state between customers, and implement `applyDiscount(percent)` in `cart.js`.",
+  "files": [
+    {
+      "name": "cart.js",
+      "editable": true
+    },
+    {
+      "name": "main.js",
+      "editable": true
+    }
+  ],
+  "entry_module": "main",
+  "entry_function": "processOrders",
+  "test_cases": [
+    {
+      "args": [
+        [
+          {
+            "customer": "Alice",
+            "items": [
+              [
+                "shirt",
+                20,
+                1
+              ]
+            ],
+            "discount": 0
+          }
+        ]
+      ],
+      "expected": {
+        "Alice": 20
+      }
+    },
+    {
+      "args": [
+        [
+          {
+            "customer": "Bob",
+            "items": [
+              [
+                "book",
+                10,
+                1
+              ]
+            ],
+            "discount": 0
+          }
+        ]
+      ],
+      "expected": {
+        "Bob": 10
+      }
+    },
+    {
+      "args": [
+        [
+          {
+            "customer": "Carol",
+            "items": [
+              [
+                "hat",
+                50,
+                1
+              ]
+            ],
+            "discount": 10
+          }
+        ]
+      ],
+      "expected": {
+        "Carol": 45.0
+      }
+    },
+    {
+      "args": [
+        [
+          {
+            "customer": "Dan",
+            "items": [
+              [
+                "pen",
+                5,
+                2
+              ],
+              [
+                "notebook",
+                8,
+                1
+              ]
+            ],
+            "discount": 0
+          }
+        ]
+      ],
+      "expected": {
+        "Dan": 18
+      }
+    },
+    {
+      "args": [
+        [
+          {
+            "customer": "Eve",
+            "items": [
+              [
+                "coat",
+                100,
+                1
+              ],
+              [
+                "scarf",
+                40,
+                1
+              ]
+            ],
+            "discount": 20
+          }
+        ]
+      ],
+      "expected": {
+        "Eve": 112.0
+      }
+    }
+  ],
+  "requirements_updates": [
+    {
+      "id": "upd_1",
+      "trigger": {
+        "type": "random",
+        "min_runs": 2,
+        "max_runs": 4
+      },
+      "sender": "PM",
+      "message": "New pricing rule from the client: any item ordered with qty ≥ 3 gets an automatic 5% bulk discount on that item’s unit price. This applies before any order-level discount.",
+      "additional_test_cases": [
+        {
+          "args": [
+            [
+              {
+                "customer": "Frank",
+                "items": [
+                  [
+                    "mug",
+                    10,
+                    4
+                  ]
+                ],
+                "discount": 0
+              }
+            ]
+          ],
+          "expected": {
+            "Frank": 38.0
+          }
+        },
+        {
+          "args": [
+            [
+              {
+                "customer": "Grace",
+                "items": [
+                  [
+                    "pen",
+                    5,
+                    2
+                  ]
+                ],
+                "discount": 0
+              }
+            ]
+          ],
+          "expected": {
+            "Grace": 10
+          }
+        },
+        {
+          "args": [
+            [
+              {
+                "customer": "Heidi",
+                "items": [
+                  [
+                    "shirt",
+                    20,
+                    3
+                  ],
+                  [
+                    "badge",
+                    2,
+                    1
+                  ]
+                ],
+                "discount": 0
+              }
+            ]
+          ],
+          "expected": {
+            "Heidi": 59.0
+          }
+        }
+      ]
+    },
+    {
+      "id": "upd_2",
+      "trigger": {
+        "type": "on_pass"
+      },
+      "sender": "Client",
+      "message": "One more thing — if the same customer appears more than once in an orders list (e.g. two separate entries), merge them into a single cart rather than overwriting. The totals should combine.",
+      "additional_test_cases": [
+        {
+          "args": [
+            [
+              {
+                "customer": "Hank",
+                "items": [
+                  [
+                    "apple",
+                    3,
+                    1
+                  ]
+                ],
+                "discount": 0
+              },
+              {
+                "customer": "Hank",
+                "items": [
+                  [
+                    "banana",
+                    2,
+                    1
+                  ]
+                ],
+                "discount": 0
+              }
+            ]
+          ],
+          "expected": {
+            "Hank": 5
+          }
+        },
+        {
+          "args": [
+            [
+              {
+                "customer": "Ivy",
+                "items": [
+                  [
+                    "tea",
+                    5,
+                    1
+                  ]
+                ],
+                "discount": 0
+              },
+              {
+                "customer": "Jake",
+                "items": [
+                  [
+                    "coffee",
+                    4,
+                    1
+                  ]
+                ],
+                "discount": 0
+              },
+              {
+                "customer": "Ivy",
+                "items": [
+                  [
+                    "milk",
+                    3,
+                    1
+                  ]
+                ],
+                "discount": 0
+              }
+            ]
+          ],
+          "expected": {
+            "Ivy": 8,
+            "Jake": 4
+          }
+        }
+      ]
+    }
+  ],
+  "hint": "Where is `items` defined in the `Cart` class — on the prototype, or in the constructor? And why does `applyDiscount` have no effect right now?",
+  "language": "javascript"
+}

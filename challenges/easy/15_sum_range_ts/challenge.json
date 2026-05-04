@@ -1,0 +1,18 @@
+{
+  "id": "easy_01_ts",
+  "title": "Sum of Range (TS)",
+  "difficulty": "easy",
+  "language": "typescript",
+  "category": "Off-by-one",
+  "description": "Given a non-negative integer `n`, return the sum of all integers from `1` to `n` inclusive.\n\n**Example 1:**\nInput: `n = 5`\nOutput: `15`\n\n**Example 2:**\nInput: `n = 0`\nOutput: `0`\n\n**Constraints:** `0 <= n <= 10000`",
+  "files": [{"name": "buggy.ts", "editable": true}],
+  "entry_module": "buggy",
+  "entry_function": "sumRange",
+  "test_cases": [
+    {"args": [5],  "expected": 15},
+    {"args": [1],  "expected": 1},
+    {"args": [10], "expected": 55},
+    {"args": [0],  "expected": 0}
+  ],
+  "hint": "What values does the loop variable take on the first and last iteration? Does it include `n`?"
+}

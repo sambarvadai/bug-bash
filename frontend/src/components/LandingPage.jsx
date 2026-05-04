@@ -33,10 +33,10 @@ export default function LandingPage({ onStart }) {
           Your linter can't save you here.
         </p>
         <p className="landing-sub">
-          10 Python bugs. Each one looks fine at a glance.
+          Python, JavaScript, TypeScript. Each bug looks fine at a glance.
         </p>
         <button className="landing-cta" onClick={onStart}>
-          Solve Now
+          View Challenges
         </button>
       </div>
 

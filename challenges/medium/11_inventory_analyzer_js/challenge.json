@@ -1,0 +1,323 @@
+{
+  "id": "medium_05_js",
+  "title": "Inventory Analyzer (JS)",
+  "difficulty": "medium",
+  "category": "Generator exhaustion + unimplemented function",
+  "description": "Given a list of inventory items, each with `\"name\"` (str), `\"value\"` (int), and `\"active\"` (bool), return a dict with:\n- `\"active_names\"` — names of active items in input order.\n- `\"stats\"` — `{\"count\", \"total\", \"average\"}` computed over active item values. Return all zeros if no active items exist.\n\n**Example 1:**\nInput:\n```\n[\n  {\"name\": \"widget\",    \"value\": 100, \"active\": true},\n  {\"name\": \"gadget\",    \"value\": 50,  \"active\": false},\n  {\"name\": \"doohickey\", \"value\": 75,  \"active\": true}\n]\n```\nOutput: `{\"active_names\": [\"widget\", \"doohickey\"], \"stats\": {\"count\": 2, \"total\": 175, \"average\": 87.5}}`\n\n**Example 2:**\nInput: `[{\"name\": \"x\", \"value\": 5, \"active\": false}]`\nOutput: `{\"active_names\": [], \"stats\": {\"count\": 0, \"total\": 0, \"average\": 0}}`\n\n**Constraints:**\n- `1 <= len(items) <= 200`\n- `1 <= value <= 100000`\n\n**Tasks:** `active_names` always returns empty — trace how `filterActive` returns its result and how many times it gets iterated. Also implement `summarize(values)` in `processor.js`.",
+  "files": [
+    {
+      "name": "processor.js",
+      "editable": true
+    },
+    {
+      "name": "main.js",
+      "editable": true
+    }
+  ],
+  "entry_module": "main",
+  "entry_function": "analyzeInventory",
+  "test_cases": [
+    {
+      "args": [
+        [
+          {
+            "name": "widget",
+            "value": 100,
+            "active": true
+          },
+          {
+            "name": "gadget",
+            "value": 50,
+            "active": false
+          },
+          {
+            "name": "doohickey",
+            "value": 75,
+            "active": true
+          }
+        ]
+      ],
+      "expected": {
+        "active_names": [
+          "widget",
+          "doohickey"
+        ],
+        "stats": {
+          "count": 2,
+          "total": 175,
+          "average": 87.5
+        }
+      }
+    },
+    {
+      "args": [
+        [
+          {
+            "name": "a",
+            "value": 10,
+            "active": true
+          },
+          {
+            "name": "b",
+            "value": 20,
+            "active": true
+          },
+          {
+            "name": "c",
+            "value": 30,
+            "active": true
+          }
+        ]
+      ],
+      "expected": {
+        "active_names": [
+          "a",
+          "b",
+          "c"
+        ],
+        "stats": {
+          "count": 3,
+          "total": 60,
+          "average": 20.0
+        }
+      }
+    },
+    {
+      "args": [
+        [
+          {
+            "name": "x",
+            "value": 5,
+            "active": false
+          }
+        ]
+      ],
+      "expected": {
+        "active_names": [],
+        "stats": {
+          "count": 0,
+          "total": 0,
+          "average": 0
+        }
+      }
+    },
+    {
+      "args": [
+        [
+          {
+            "name": "solo",
+            "value": 42,
+            "active": true
+          },
+          {
+            "name": "bench",
+            "value": 99,
+            "active": false
+          }
+        ]
+      ],
+      "expected": {
+        "active_names": [
+          "solo"
+        ],
+        "stats": {
+          "count": 1,
+          "total": 42,
+          "average": 42.0
+        }
+      }
+    },
+    {
+      "args": [
+        [
+          {
+            "name": "p",
+            "value": 25,
+            "active": true
+          },
+          {
+            "name": "q",
+            "value": 25,
+            "active": true
+          },
+          {
+            "name": "r",
+            "value": 25,
+            "active": false
+          }
+        ]
+      ],
+      "expected": {
+        "active_names": [
+          "p",
+          "q"
+        ],
+        "stats": {
+          "count": 2,
+          "total": 50,
+          "average": 25.0
+        }
+      }
+    }
+  ],
+  "requirements_updates": [
+    {
+      "id": "upd_1",
+      "trigger": {
+        "type": "random",
+        "min_runs": 2,
+        "max_runs": 4
+      },
+      "sender": "PM",
+      "message": "Warehouse team also needs visibility into inactive items. Please add `inactive_names` (list) and `inactive_count` (int) to the response.",
+      "additional_test_cases": [
+        {
+          "args": [
+            [
+              {
+                "name": "w",
+                "value": 100,
+                "active": true
+              },
+              {
+                "name": "x",
+                "value": 50,
+                "active": false
+              },
+              {
+                "name": "y",
+                "value": 75,
+                "active": true
+              },
+              {
+                "name": "z",
+                "value": 30,
+                "active": false
+              }
+            ]
+          ],
+          "expected": {
+            "active_names": [
+              "w",
+              "y"
+            ],
+            "stats": {
+              "count": 2,
+              "total": 175,
+              "average": 87.5
+            },
+            "inactive_names": [
+              "x",
+              "z"
+            ],
+            "inactive_count": 2
+          }
+        },
+        {
+          "args": [
+            [
+              {
+                "name": "only",
+                "value": 5,
+                "active": false
+              }
+            ]
+          ],
+          "expected": {
+            "active_names": [],
+            "stats": {
+              "count": 0,
+              "total": 0,
+              "average": 0
+            },
+            "inactive_names": [
+              "only"
+            ],
+            "inactive_count": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "upd_2",
+      "trigger": {
+        "type": "on_pass"
+      },
+      "sender": "Analytics",
+      "message": "Dashboard needs min and max fields inside stats as well. Add `\"min\"` and `\"max\"` to the stats dict. For an empty active set, both should be 0.",
+      "additional_test_cases": [
+        {
+          "args": [
+            [
+              {
+                "name": "a",
+                "value": 10,
+                "active": true
+              },
+              {
+                "name": "b",
+                "value": 90,
+                "active": true
+              },
+              {
+                "name": "c",
+                "value": 50,
+                "active": true
+              },
+              {
+                "name": "d",
+                "value": 20,
+                "active": false
+              }
+            ]
+          ],
+          "expected": {
+            "active_names": [
+              "a",
+              "b",
+              "c"
+            ],
+            "stats": {
+              "count": 3,
+              "total": 150,
+              "average": 50.0,
+              "min": 10,
+              "max": 90
+            },
+            "inactive_names": [
+              "d"
+            ],
+            "inactive_count": 1
+          }
+        },
+        {
+          "args": [
+            [
+              {
+                "name": "only",
+                "value": 42,
+                "active": true
+              }
+            ]
+          ],
+          "expected": {
+            "active_names": [
+              "only"
+            ],
+            "stats": {
+              "count": 1,
+              "total": 42,
+              "average": 42.0,
+              "min": 42,
+              "max": 42
+            },
+            "inactive_names": [],
+            "inactive_count": 0
+          }
+        }
+      ]
+    }
+  ],
+  "hint": "Can you iterate over the same generator twice? What does `filterActive` actually return, and what happens the second time you spread it?",
+  "language": "javascript"
+}

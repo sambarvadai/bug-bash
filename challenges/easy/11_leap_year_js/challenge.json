@@ -1,0 +1,20 @@
+{
+  "id": "easy_04_js",
+  "title": "Leap Year (JS)",
+  "difficulty": "easy",
+  "language": "javascript",
+  "category": "Boolean logic",
+  "description": "Return `true` if a year is a leap year, `false` otherwise.\n\nRules:\n- Divisible by 4 **and** not divisible by 100 → leap year\n- **Or** divisible by 400 → also a leap year\n\n**Examples:** 2000 → true, 1900 → false, 2024 → true, 2023 → false",
+  "files": [{"name": "buggy.js", "editable": true}],
+  "entry_module": "buggy",
+  "entry_function": "isLeapYear",
+  "test_cases": [
+    {"args": [2000], "expected": true},
+    {"args": [1900], "expected": false},
+    {"args": [2024], "expected": true},
+    {"args": [2023], "expected": false},
+    {"args": [1600], "expected": true},
+    {"args": [2100], "expected": false}
+  ],
+  "hint": "The two leap-year conditions should be joined by `||`, not `&&`. Read the rule again carefully."
+}

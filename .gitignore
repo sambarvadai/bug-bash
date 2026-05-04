@@ -11,4 +11,9 @@ frontend/dist/
 
 # Misc
 .env
+*.env.local
 .DS_Store
+
+# Dev tooling
+gen_medium.py
+gen_medium_lang.py

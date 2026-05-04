@@ -1,0 +1,240 @@
+{
+  "id": "medium_02_js",
+  "title": "Request Logger (JS)",
+  "difficulty": "medium",
+  "category": "Class vs instance variable",
+  "description": "Given a list of service entries, each containing a service name and a list of request IDs, return a dict mapping each service name to **only its own** request IDs.\n\nEach input entry: `{\"service\": str, \"ids\": [str, ...]}`\n\n**Example 1:**\nInput:\n```\n[\n  {\"service\": \"api\",   \"ids\": [\"req_1\", \"req_2\"]},\n  {\"service\": \"db\",    \"ids\": [\"req_3\"]},\n  {\"service\": \"cache\", \"ids\": [\"req_4\", \"req_5\"]}\n]\n```\nOutput:\n```\n{\"api\": [\"req_1\", \"req_2\"], \"db\": [\"req_3\"], \"cache\": [\"req_4\", \"req_5\"]}\n```\n\n**Constraints:**\n- `1 <= len(service_requests) <= 50`\n- Each service name is unique in the input.\n- `1 <= len(ids) <= 20` per entry.\n\n**Note:** A new `RequestLog` instance is created for each service — yet request IDs from earlier services keep appearing. Where exactly is `log` defined, and is it truly per-instance?",
+  "files": [
+    {
+      "name": "main.js",
+      "editable": true
+    },
+    {
+      "name": "logger.js",
+      "editable": true
+    }
+  ],
+  "entry_module": "main",
+  "entry_function": "collectLogs",
+  "test_cases": [
+    {
+      "args": [
+        [
+          {
+            "service": "api",
+            "ids": [
+              "req_1",
+              "req_2"
+            ]
+          },
+          {
+            "service": "db",
+            "ids": [
+              "req_3"
+            ]
+          },
+          {
+            "service": "cache",
+            "ids": [
+              "req_4",
+              "req_5"
+            ]
+          }
+        ]
+      ],
+      "expected": {
+        "api": [
+          "req_1",
+          "req_2"
+        ],
+        "db": [
+          "req_3"
+        ],
+        "cache": [
+          "req_4",
+          "req_5"
+        ]
+      }
+    }
+  ],
+  "hint": "Is `log` defined on the instance (in the constructor), or somewhere else? What happens when multiple instances push to the same array reference?",
+  "requirements_updates": [
+    {
+      "id": "upd_1",
+      "trigger": {
+        "type": "random",
+        "min_runs": 2,
+        "max_runs": 4
+      },
+      "sender": "DevOps",
+      "message": "Plain request IDs aren't enough for tracing. `get_log()` should now return a list of dicts: `{\"id\": <request_id>, \"seq\": <1-based sequence number>}`. Sequence resets per service.",
+      "additional_test_cases": [
+        {
+          "args": [
+            [
+              {
+                "service": "api",
+                "ids": [
+                  "req_1",
+                  "req_2"
+                ]
+              },
+              {
+                "service": "db",
+                "ids": [
+                  "req_3"
+                ]
+              }
+            ]
+          ],
+          "expected": {
+            "api": [
+              {
+                "id": "req_1",
+                "seq": 1
+              },
+              {
+                "id": "req_2",
+                "seq": 2
+              }
+            ],
+            "db": [
+              {
+                "id": "req_3",
+                "seq": 1
+              }
+            ]
+          }
+        },
+        {
+          "args": [
+            [
+              {
+                "service": "cache",
+                "ids": [
+                  "r1",
+                  "r2",
+                  "r3"
+                ]
+              }
+            ]
+          ],
+          "expected": {
+            "cache": [
+              {
+                "id": "r1",
+                "seq": 1
+              },
+              {
+                "id": "r2",
+                "seq": 2
+              },
+              {
+                "id": "r3",
+                "seq": 3
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "upd_2",
+      "trigger": {
+        "type": "on_pass"
+      },
+      "sender": "PM",
+      "message": "New requirement: if the same service appears more than once in the input, merge the entries into a single log (don't overwrite). Sequence numbers should continue from where they left off.",
+      "additional_test_cases": [
+        {
+          "args": [
+            [
+              {
+                "service": "api",
+                "ids": [
+                  "req_1",
+                  "req_2"
+                ]
+              },
+              {
+                "service": "api",
+                "ids": [
+                  "req_3",
+                  "req_4"
+                ]
+              }
+            ]
+          ],
+          "expected": {
+            "api": [
+              {
+                "id": "req_1",
+                "seq": 1
+              },
+              {
+                "id": "req_2",
+                "seq": 2
+              },
+              {
+                "id": "req_3",
+                "seq": 3
+              },
+              {
+                "id": "req_4",
+                "seq": 4
+              }
+            ]
+          }
+        },
+        {
+          "args": [
+            [
+              {
+                "service": "logs",
+                "ids": [
+                  "a"
+                ]
+              },
+              {
+                "service": "metrics",
+                "ids": [
+                  "b",
+                  "c"
+                ]
+              },
+              {
+                "service": "logs",
+                "ids": [
+                  "d"
+                ]
+              }
+            ]
+          ],
+          "expected": {
+            "logs": [
+              {
+                "id": "a",
+                "seq": 1
+              },
+              {
+                "id": "d",
+                "seq": 2
+              }
+            ],
+            "metrics": [
+              {
+                "id": "b",
+                "seq": 1
+              },
+              {
+                "id": "c",
+                "seq": 2
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "language": "javascript"
+}

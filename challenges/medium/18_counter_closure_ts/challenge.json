@@ -1,0 +1,281 @@
+{
+  "id": "medium_06_ts",
+  "title": "Counter Closure (TS)",
+  "difficulty": "medium",
+  "category": "nonlocal + unimplemented closure",
+  "description": "Implement a stateful counter using closures. Given a sequence of operations and a starting value, apply each operation in order and return the list of counter values after each step.\n\nSupported operations:\n- `\"inc\"` — add `amount` to the counter, return the new value.\n- `\"dec\"` — subtract `amount` from the counter, return the new value.\n\n**Example 1:**\nInput: `operations = [[\"inc\", 1], [\"inc\", 2], [\"inc\", 3]], start = 0`\nOutput: `[1, 3, 6]`\nExplanation: 0+1=1, 1+2=3, 3+3=6\n\n**Example 2:**\nInput: `operations = [[\"inc\", 5], [\"dec\", 2]], start = 0`\nOutput: `[5, 3]`\n\n**Example 3:**\nInput: `operations = [[\"inc\", 1]], start = 10`\nOutput: `[11]`\n\n**Constraints:**\n- `1 <= len(operations) <= 100`\n- `op ∈ {\"inc\", \"dec\"}`\n- `0 <= amount <= 1000`\n- `-10000 <= start <= 10000`\n\n**Tasks:** `increment` throws an error on the first call — check how `count` is declared and whether that allows reassignment inside a closure. Also implement `decrement` in `counter.js`.",
+  "files": [
+    {
+      "name": "counter.ts",
+      "editable": true
+    },
+    {
+      "name": "main.ts",
+      "editable": true
+    }
+  ],
+  "entry_module": "main",
+  "entry_function": "runOperations",
+  "test_cases": [
+    {
+      "args": [
+        [
+          [
+            "inc",
+            1
+          ],
+          [
+            "inc",
+            2
+          ],
+          [
+            "inc",
+            3
+          ]
+        ],
+        0
+      ],
+      "expected": [
+        1,
+        3,
+        6
+      ]
+    },
+    {
+      "args": [
+        [
+          [
+            "inc",
+            5
+          ],
+          [
+            "dec",
+            2
+          ]
+        ],
+        0
+      ],
+      "expected": [
+        5,
+        3
+      ]
+    },
+    {
+      "args": [
+        [
+          [
+            "inc",
+            10
+          ],
+          [
+            "dec",
+            3
+          ],
+          [
+            "inc",
+            1
+          ]
+        ],
+        0
+      ],
+      "expected": [
+        10,
+        7,
+        8
+      ]
+    },
+    {
+      "args": [
+        [
+          [
+            "dec",
+            1
+          ],
+          [
+            "inc",
+            5
+          ]
+        ],
+        0
+      ],
+      "expected": [
+        -1,
+        4
+      ]
+    },
+    {
+      "args": [
+        [
+          [
+            "inc",
+            1
+          ]
+        ],
+        10
+      ],
+      "expected": [
+        11
+      ]
+    }
+  ],
+  "requirements_updates": [
+    {
+      "id": "upd_1",
+      "trigger": {
+        "type": "random",
+        "min_runs": 2,
+        "max_runs": 4
+      },
+      "sender": "PM",
+      "message": "Product says the counter should never go below zero — decrement should floor at 0 instead of producing negative values.",
+      "additional_test_cases": [
+        {
+          "args": [
+            [
+              [
+                "inc",
+                5
+              ],
+              [
+                "dec",
+                10
+              ]
+            ],
+            0
+          ],
+          "expected": [
+            5,
+            0
+          ]
+        },
+        {
+          "args": [
+            [
+              [
+                "dec",
+                3
+              ],
+              [
+                "dec",
+                3
+              ]
+            ],
+            0
+          ],
+          "expected": [
+            0,
+            0
+          ]
+        },
+        {
+          "args": [
+            [
+              [
+                "inc",
+                2
+              ],
+              [
+                "dec",
+                1
+              ],
+              [
+                "dec",
+                5
+              ]
+            ],
+            0
+          ],
+          "expected": [
+            2,
+            1,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "id": "upd_2",
+      "trigger": {
+        "type": "on_pass"
+      },
+      "sender": "Client",
+      "message": "We need a read-only ‘peek’ operation: add `\"read\"` to the ops dict. It receives a dummy argument (always 0) and just returns the current count without modifying it.",
+      "additional_test_cases": [
+        {
+          "args": [
+            [
+              [
+                "inc",
+                5
+              ],
+              [
+                "read",
+                0
+              ],
+              [
+                "dec",
+                2
+              ],
+              [
+                "read",
+                0
+              ]
+            ],
+            0
+          ],
+          "expected": [
+            5,
+            5,
+            3,
+            3
+          ]
+        },
+        {
+          "args": [
+            [
+              [
+                "read",
+                0
+              ]
+            ],
+            7
+          ],
+          "expected": [
+            7
+          ]
+        },
+        {
+          "args": [
+            [
+              [
+                "inc",
+                3
+              ],
+              [
+                "read",
+                0
+              ],
+              [
+                "dec",
+                10
+              ],
+              [
+                "read",
+                0
+              ]
+            ],
+            0
+          ],
+          "expected": [
+            3,
+            3,
+            0,
+            0
+          ]
+        }
+      ]
+    }
+  ],
+  "hint": "JavaScript closures capture variables by reference — but can you reassign a `const` binding? What declaration keyword allows the closed-over variable to be updated?",
+  "language": "typescript"
+}

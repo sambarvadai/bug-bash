@@ -1,0 +1,19 @@
+{
+  "id": "easy_05_ts",
+  "title": "Grade Message (TS)",
+  "difficulty": "easy",
+  "language": "typescript",
+  "category": "Missing else / undefined variable",
+  "description": "Given a student's name and numeric score (0–100), return a string like `\"Alice: A\"` using this scale:\n- 90–100 → A\n- 80–89 → B\n- 70–79 → C\n- 60–69 → D\n- below 60 → F\n\n**Example:** `gradeMessage(\"Alice\", 95)` → `\"Alice: A\"`",
+  "files": [{"name": "buggy.ts", "editable": true}],
+  "entry_module": "buggy",
+  "entry_function": "gradeMessage",
+  "test_cases": [
+    {"args": ["Alice", 95], "expected": "Alice: A"},
+    {"args": ["Bob",   82], "expected": "Bob: B"},
+    {"args": ["Carol", 73], "expected": "Carol: C"},
+    {"args": ["Dan",   65], "expected": "Dan: D"},
+    {"args": ["Eve",   40], "expected": "Eve: F"}
+  ],
+  "hint": "What is the value of `grade` when no branch matches? TypeScript would catch this with strict mode — but the real fix is in the logic."
+}

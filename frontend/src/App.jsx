@@ -1,5 +1,5 @@
-import { useState, useEffect, useCallback } from "react";
-import Sidebar from "./components/Sidebar.jsx";
+import { useState, useEffect, useCallback, useMemo } from "react";
+import ChallengeList from "./components/ChallengeList.jsx";
 import ChallengeInfo from "./components/ChallengeInfo.jsx";
 import CodeEditor from "./components/CodeEditor.jsx";
 import UpdateFeed from "./components/UpdateFeed.jsx";
@@ -61,6 +61,21 @@ export default function App() {
     }
     setNewlyFiredIds([]);
   }, [challenge]);
+
+  // Group sibling challenges (same problem, different language) by stripping _js/_ts suffix
+  const languageSiblings = useMemo(() => {
+    const groups = {};
+    for (const c of challenges) {
+      const base = c.id.replace(/_(js|ts)$/, "");
+      if (!groups[base]) groups[base] = [];
+      groups[base].push(c);
+    }
+    const map = {};
+    for (const siblings of Object.values(groups)) {
+      for (const c of siblings) map[c.id] = siblings;
+    }
+    return map;
+  }, [challenges]);
 
   // Fetch challenge list once
   useEffect(() => {
@@ -161,22 +176,33 @@ export default function App() {
   );
 
   if (page === "landing") {
-    return <LandingPage onStart={() => setPage("app")} />;
+    return <LandingPage onStart={() => setPage("list")} />;
   }
 
-  return (
-    <div className="app">
-      <Sidebar
+  if (page === "list") {
+    return (
+      <ChallengeList
         challenges={challenges}
-        selectedId={selectedId}
         solved={solved}
-        onSelect={setSelectedId}
+        onSelect={(id) => { setSelectedId(id); setPage("workspace"); }}
       />
+    );
+  }
+
+  // workspace
+  return (
+    <div className="app workspace-app">
+      <div className="workspace-topbar">
+        <button className="back-btn" onClick={() => setPage("list")}>
+          ← Challenges
+        </button>
+        {challenge && (
+          <span className="workspace-topbar-title">{challenge.title}</span>
+        )}
+      </div>
       <div className="main">
         {!challenge ? (
-          <div className="empty-state">
-            {challenges.length === 0 ? "Loading challenges…" : "Loading…"}
-          </div>
+          <div className="empty-state">Loading…</div>
         ) : (
           <div className="workspace">
             <div className="left-panel">
@@ -190,6 +216,8 @@ export default function App() {
                 hintShown={hintShown}
                 onRun={handleRun}
                 onHint={() => setHintShown(true)}
+                languageSiblings={languageSiblings[challenge.id] || []}
+                onLanguageChange={setSelectedId}
               />
               <UpdateFeed
                 challenge={challenge}
