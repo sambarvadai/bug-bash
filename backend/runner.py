@@ -172,12 +172,43 @@ _TS_CONFIG = """{
   }
 }"""
 
+_NODE_MEMORY_MB = os.getenv("BUG_BASH_NODE_MEMORY_MB", "128")
+
+
+def _node_env() -> dict:
+    env = os.environ.copy()
+    node_opts = env.get("NODE_OPTIONS", "").strip()
+    memory_opt = f"--max-old-space-size={_NODE_MEMORY_MB}"
+    env["NODE_OPTIONS"] = f"{node_opts} {memory_opt}".strip() if node_opts else memory_opt
+    return env
+
+
+def _resolve_node_command(language: str) -> tuple[list[str] | None, str | None]:
+    node_bin = shutil.which("node")
+    if not node_bin:
+        return None, "JavaScript/TypeScript runner is unavailable: Node.js is not installed on the backend."
+
+    if language == "javascript":
+        return [node_bin], None
+
+    ts_node_bin = shutil.which("ts-node")
+    if ts_node_bin:
+        return [ts_node_bin, "--transpile-only", "--skip-project"], None
+
+    return None, (
+        "TypeScript runner is unavailable: `ts-node` is not installed on the backend. "
+        "Install `typescript` and `ts-node` in the Railway service."
+    )
+
 
 def _run_node_challenge(challenge: dict, user_code: dict, language: str) -> dict:
     challenge_dir = challenge["_dir"]
     entry_module = challenge["entry_module"]
     entry_function = challenge["entry_function"]
     is_ts = language == "typescript"
+    base_cmd, runtime_error = _resolve_node_command(language)
+    if runtime_error:
+        return {"passed": False, "error": runtime_error, "results": []}
 
     with tempfile.TemporaryDirectory() as tmpdir:
         for file_info in challenge["files"]:
@@ -213,12 +244,7 @@ def _run_node_challenge(challenge: dict, user_code: dict, language: str) -> dict
         with open(os.path.join(tmpdir, runner_filename), "w", encoding="utf-8") as f:
             f.write(runner_content)
 
-        if is_ts:
-            bin_name = shutil.which("ts-node") or "ts-node"
-            cmd = [bin_name, "--transpile-only", "--skip-project", runner_filename]
-        else:
-            bin_name = shutil.which("node") or "node"
-            cmd = [bin_name, runner_filename]
+        cmd = [*base_cmd, runner_filename]
 
         try:
             proc = subprocess.run(
@@ -228,6 +254,7 @@ def _run_node_challenge(challenge: dict, user_code: dict, language: str) -> dict
                 timeout=10,
                 cwd=tmpdir,
                 preexec_fn=_PREEXEC,
+                env=_node_env(),
             )
 
             if not proc.stdout.strip():
